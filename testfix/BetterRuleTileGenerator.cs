@@ -292,7 +292,10 @@ namespace VinToolsEditor.BetterRuleTiles
                         NeighborPositions.Add((Vector3Int)container.EditorToUnityCoord(new Vector2Int(neighbor.x, neighbor.y), item.Position));
                     }
                 }
-
+                
+                //make sure there are no duplicates in the neighborPositions
+                NeighborPositions = RemoveDuplacePositions(NeighborPositions);
+                
                 //create tiling
                 int[] neighbors = new int[NeighborPositions.Count];
 
@@ -399,6 +402,20 @@ namespace VinToolsEditor.BetterRuleTiles
 
             //return
             return tilingRule;
+        }
+        static List<Vector3Int> RemoveDuplacePositions(List<Vector3Int> neighborPositions)
+        {
+            //create new empty list
+            List<Vector3Int> newList = new List<Vector3Int>();
+
+            //add positions to the new list if it doesn't contain it yet
+            foreach (var pos in neighborPositions)
+            {
+                if (!newList.Contains(pos)) newList.Add(pos);
+            }
+
+            //return list with no duplicates
+            return newList;
         }
         static List<ExtendedTilingRule> RemoveDuplicates(List<ExtendedTilingRule> tilingRules)
         {
